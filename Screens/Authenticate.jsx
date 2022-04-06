@@ -1,5 +1,7 @@
-import React from 'react'
-import { StyleSheet, Text, View, Dimensions, TextInput, TouchableOpacity } from 'react-native'
+import React, {useContext, useState} from 'react'
+import { StyleSheet, Text, View, Dimensions, TextInput, TouchableOpacity, Alert } from 'react-native'
+
+import { MainContext } from '../Hooks/Context/MainContext';
 
 import Bubles from '../Components/Bubles';
 
@@ -7,6 +9,48 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 
 const Authenticate = ({ navigation }) => {
+
+    const {setAuth} = useContext(MainContext);
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    const submit = async()=>{
+
+        let result = await fetch(`${path}user/login`,
+        {
+            method: 'POST',
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: email,
+                password: password
+            })
+        });
+
+        let resultData = await result.json();
+        console.log(resultData);
+
+        if (!resultData){
+            return Alert.alert(
+                'ERROR',
+                "Nothing came back",
+                [{ text: 'fermer' }]
+            );
+        }
+        if(resultData.message === 'success') {
+            setAuth(resultData.data);
+            return Alert.alert(
+                'Success',
+                `Welcome Mr(s) ${resultData.data.email}`,
+                [{ text: 'fermer' }]
+            );
+        }
+
+        
+        
+    }
 
 
   return (
@@ -22,22 +66,23 @@ const Authenticate = ({ navigation }) => {
 
             <TextInput
                 style={{height: windowHeight * 0.06, marginBottom: "4%", borderWidth: 1, paddingHorizontal: "5%", borderRadius: 20, backgroundColor: 'rgb(230,238,241)', borderColor: 'white', fontSize: 16, fontWeight: '700'}}
-                // onChangeText={onChangeNumber}
+
+                onChangeText={(text) => setEmail(text)}
                 // value={number}
                 placeholderTextColor='#6d6e6e'
                 
                 placeholder="FullName"
-                keyboardType="numeric"
+                keyboardType="email-address"
             />
 
             <TextInput
                 style={{height: windowHeight * 0.06, marginBottom: "4%", borderWidth: 1, padding: 10, borderRadius: 20, backgroundColor: 'rgb(230,238,241)', borderColor: 'white', fontSize: 16, fontWeight: '700'}}
-                // onChangeText={onChangeNumber}
+                onChangeText={(val) => setPassword(val)}
                 // value={number}
                 placeholderTextColor='#6d6e6e'
-                
+                secureTextEntry={true}
                 placeholder="Your Email"
-                keyboardType="numeric"
+                keyboardType="default"
             />
 
             <TextInput
@@ -62,8 +107,8 @@ const Authenticate = ({ navigation }) => {
         </View>
 
         <TouchableOpacity 
-        style={{width: windowWidth * 0.9, alignSelf: 'center', backgroundColor: '#219EBA', paddingHorizontal: "10%", paddingVertical: "3%", marginTop: "10%"}}
-        onPress={()=> navigation.navigate('Splash')}
+            style={{width: windowWidth * 0.9, alignSelf: 'center', backgroundColor: '#219EBA', paddingHorizontal: "10%", paddingVertical: "3%", marginTop: "10%"}}
+            onPress={submit}
         >
             <Text style={{fontWeight: '900', color: 'white', alignSelf: 'center', fontSize: 16}}>Get Started</Text>
         </TouchableOpacity>
