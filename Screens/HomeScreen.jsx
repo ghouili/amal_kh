@@ -3,6 +3,7 @@ import { View, Text, Button, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { MainContext } from '../Hooks/Context/MainContext';
+import { SafeAreaView } from 'react-native-safe-area-context';
 const HomeScreen = () => {
 
     const {auth, setChanged} = useContext(MainContext);
@@ -11,7 +12,7 @@ const HomeScreen = () => {
       setChanged('loggedout');
     }
   return (
-    <View>
+    <SafeAreaView style={{marginTop: "10%"}}>
       <Text>homeScreen</Text>
       <Text>homeScreen</Text>
       <Text>homeScreen</Text>
@@ -22,7 +23,7 @@ const HomeScreen = () => {
       <TouchableOpacity
         onPress={logout}
       ><Text>Logout</Text></TouchableOpacity>
-    </View>
+    </SafeAreaView>
   )
 }
 

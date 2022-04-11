@@ -8,6 +8,8 @@ const Stack = createStackNavigator();
 import Authenticate from '../Screens/Authenticate';
 import SplashScreen from '../Screens/SplashScreen';
 import HomeScreen from '../Screens/HomeScreen';
+import DrawerNav from './DrawerNav';
+
 const AUth_Navigation = ({navigation}) => {
 
   const { auth } = useContext(MainContext);
@@ -18,13 +20,13 @@ const AUth_Navigation = ({navigation}) => {
         headerShown: false
       }}
     >
-      {!auth?
+      {auth?
+        <Stack.Screen name="Main" component={DrawerNav} />
+      : 
         <>
           <Stack.Screen name="Splash" component={SplashScreen} />
           <Stack.Screen name="Auth" component={Authenticate} />
         </> 
-        : 
-        <Stack.Screen name="Home" component={HomeScreen} />
       }
       
     </Stack.Navigator>

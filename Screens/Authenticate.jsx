@@ -18,38 +18,42 @@ const Authenticate = ({ navigation }) => {
 
     const submit = async()=>{
 
-        let result = await fetch(`${path}user/login`,
-        {
-            method: 'POST',
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                email: email,
-                password: password
-            })
-        });
+        setChanged("loggedin");
+        const jsonValue = JSON.stringify({name: "amal khdhri", email:"amal.khadroui@gmail.com"});
+        await AsyncStorage.setItem('user', jsonValue);
 
-        let resultData = await result.json();
-        console.log(resultData);
+        // let result = await fetch(`${path}user/login`,
+        // {
+        //     method: 'POST',
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify({
+        //         email: email,
+        //         password: password
+        //     })
+        // });
 
-        if (!resultData){
-            return Alert.alert(
-                'ERROR',
-                "Nothing came back",
-                [{ text: 'fermer' }]
-            );
-        }
-        if(resultData.message === 'success') {
-            setChanged("loggedin");
-            const jsonValue = JSON.stringify(resultData.data);
-            await AsyncStorage.setItem('user', jsonValue);
-            return Alert.alert(
-                'Success',
-                `Welcome Mr(s) ${resultData.data.email}`,
-                [{ text: 'fermer' }]
-            );
-        }
+        // let resultData = await result.json();
+        // console.log(resultData);
+
+        // if (!resultData){
+        //     return Alert.alert(
+        //         'ERROR',
+        //         "Nothing came back",
+        //         [{ text: 'fermer' }]
+        //     );
+        // }
+        // if(resultData.message === 'success') {
+        //     setChanged("loggedin");
+        //     const jsonValue = JSON.stringify(resultData.data);
+        //     await AsyncStorage.setItem('user', jsonValue);
+        //     return Alert.alert(
+        //         'Success',
+        //         `Welcome Mr(s) ${resultData.data.email}`,
+        //         [{ text: 'fermer' }]
+        //     );
+        // }
 
         
         
