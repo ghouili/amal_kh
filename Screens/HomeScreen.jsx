@@ -1,10 +1,15 @@
 import React, {useContext} from 'react'
 import { View, Text, Button, TouchableOpacity } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { MainContext } from '../Hooks/Context/MainContext';
 const HomeScreen = () => {
 
-    const {auth, setAuth} = useContext(MainContext);
+    const {auth, setChanged} = useContext(MainContext);
+    const logout = async () => {
+      await AsyncStorage.removeItem('user');
+      setChanged('loggedout');
+    }
   return (
     <View>
       <Text>homeScreen</Text>
@@ -15,7 +20,7 @@ const HomeScreen = () => {
       <Text>{auth.email}</Text>
       }
       <TouchableOpacity
-        onPress={() => setAuth(null)}
+        onPress={logout}
       ><Text>Logout</Text></TouchableOpacity>
     </View>
   )

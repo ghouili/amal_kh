@@ -8,7 +8,7 @@ import AUth_Navigation from './navigations/AUth_Navigation';
 
 export default function App() {
 
-  global.path = 'http://192.168.1.100:4000/'
+  global.path = 'http://192.168.1.100:5000/'
 
   return (
     <ContextProvider>

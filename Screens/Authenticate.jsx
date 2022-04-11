@@ -1,5 +1,6 @@
 import React, {useContext, useState} from 'react'
 import { StyleSheet, Text, View, Dimensions, TextInput, TouchableOpacity, Alert } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { MainContext } from '../Hooks/Context/MainContext';
 
@@ -10,7 +11,7 @@ const windowHeight = Dimensions.get('window').height;
 
 const Authenticate = ({ navigation }) => {
 
-    const {setAuth} = useContext(MainContext);
+    const {setChanged} = useContext(MainContext);
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -40,7 +41,9 @@ const Authenticate = ({ navigation }) => {
             );
         }
         if(resultData.message === 'success') {
-            setAuth(resultData.data);
+            setChanged("loggedin");
+            const jsonValue = JSON.stringify(resultData.data);
+            await AsyncStorage.setItem('user', jsonValue);
             return Alert.alert(
                 'Success',
                 `Welcome Mr(s) ${resultData.data.email}`,
@@ -71,7 +74,7 @@ const Authenticate = ({ navigation }) => {
                 // value={number}
                 placeholderTextColor='#6d6e6e'
                 
-                placeholder="FullName"
+                placeholder="email"
                 keyboardType="email-address"
             />
 
@@ -81,11 +84,11 @@ const Authenticate = ({ navigation }) => {
                 // value={number}
                 placeholderTextColor='#6d6e6e'
                 secureTextEntry={true}
-                placeholder="Your Email"
+                placeholder="password"
                 keyboardType="default"
             />
 
-            <TextInput
+            {/* <TextInput
                 style={{height: windowHeight * 0.06, marginBottom: "4%", borderWidth: 1, padding: 10, borderRadius: 20, backgroundColor: 'rgb(230,238,241)', borderColor: 'white', fontSize: 16, fontWeight: '700'}}
                 // onChangeText={onChangeNumber}
                 // value={number}
@@ -103,7 +106,7 @@ const Authenticate = ({ navigation }) => {
                 
                 placeholder="Confirm Password"
                 keyboardType="numeric"
-            />
+            /> */}
         </View>
 
         <TouchableOpacity 
